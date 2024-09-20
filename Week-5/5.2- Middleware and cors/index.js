@@ -2,6 +2,8 @@ const express = require("express");
 
 const bodyParser = require("body-parser");
 
+const cors = require("cors");
+
 const app = express();
 
 let requestCount = 0;
@@ -13,6 +15,12 @@ let requestCount = 0;
 // }
 
 app.use(bodyParser.json());
+app.use(cors());
+
+// app.use(cors(), {
+//   origin: "http://localhost:4000",
+//   methods: "GET", "POST"
+// })
 
 // function loggerMiddleware(req, res, next) {
 //   requestCount++;
@@ -23,8 +31,11 @@ app.use(bodyParser.json());
 // }
 
 function realSum(req, res) {
+  requestCount++;
   const a = parseInt(req.body.a);
   const b = parseInt(req.body.b);
+
+  console.log(a, b);
 
   console.log(`no .of request = ${requestCount}`);
   res.json({
@@ -33,9 +44,11 @@ function realSum(req, res) {
 }
 
 function realMultiply(req, res) {
+  requestCount++;
   const a = parseInt(req.body.a);
   const b = parseInt(req.body.b);
 
+  console.log(a, b);
   console.log(`no .of request = ${requestCount}`);
   res.json({
     ans: a * b,
@@ -46,4 +59,4 @@ app.post("/sum", realSum);
 
 app.post("/multiply", realMultiply);
 
-app.listen(3000);
+app.listen(4000);
