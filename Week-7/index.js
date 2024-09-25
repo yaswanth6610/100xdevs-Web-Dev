@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const { UserModel, TodoModel } = require("./db");
 const jwt = require("jsonwebtoken");
-const jwt_SECRET = "nothinghard";
+const { auth, jwt_SECRET } = require("./auth");
 
 mongoose.connect(
   "mongodb+srv://yaswanth:VSILZOxoRVP5kArL@cluster0.qaouq.mongodb.net/Todo-App"
@@ -55,21 +55,6 @@ app.post("/signin", async function (req, res) {
     });
   }
 });
-
-function auth(req, res, next) {
-  const token = req.headers.token;
-
-  const decodedData = jwt.verify(token, jwt_SECRET);
-
-  if (decodedData) {
-    req.userId = decodedData.id;
-    next();
-  } else {
-    res.status(403).json({
-      message: "Incorrent credentials",
-    });
-  }
-}
 
 app.post("/todo", auth, async function (req, res) {
   const userId = req.userId;
